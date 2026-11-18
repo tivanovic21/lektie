@@ -1,0 +1,12 @@
+{
+  "name": "lektie",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "mobile": "pnpm --filter @lektie/mobile start",
+    "web": "pnpm --filter @lektie/web dev",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r --if-present lint",
+    "build:web": "pnpm --filter @lektie/web build"
+  }
+}

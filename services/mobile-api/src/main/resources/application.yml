@@ -1,0 +1,21 @@
+server:
+  port: ${PORT:8081}
+
+spring:
+  application:
+    name: mobile-api
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/lektie}
+    username: ${DB_USER:lektie}
+    password: ${DB_PASSWORD:lektie}
+  jpa:
+    open-in-view: false
+    hibernate:
+      # Schema is owned by db/migrations (Flyway). The API only checks it.
+      ddl-auto: validate
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

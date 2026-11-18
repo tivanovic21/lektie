@@ -1,0 +1,62 @@
+# Local development stack.
+#   docker compose up -d                 -> Postgres + migrations (backend devs run the APIs from the IDE)
+#   docker compose --profile api up -d   -> also Mobile API (:8081) and Web API (:8082) (mobile/web devs)
+name: lektie
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${DB_NAME:-lektie}
+      POSTGRES_USER: ${DB_USER:-lektie}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-lektie}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrate:
+    image: flyway/flyway:11
+    command: -connectRetries=10 migrate
+    environment:
+      FLYWAY_URL: jdbc:postgresql://db:5432/${DB_NAME:-lektie}
+      FLYWAY_USER: ${DB_USER:-lektie}
+      FLYWAY_PASSWORD: ${DB_PASSWORD:-lektie}
+    volumes:
+      - ./db/migrations:/flyway/sql:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  mobile-api:
+    profiles: ["api"]
+    build:
+      context: ./services
+      dockerfile: mobile-api/Dockerfile
+    environment: &api-env
+      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:-lektie}
+      DB_USER: ${DB_USER:-lektie}
+      DB_PASSWORD: ${DB_PASSWORD:-lektie}
+    ports:
+      - "8081:8081"
+    depends_on: &api-deps
+      migrate:
+        condition: service_completed_successfully
+
+  web-api:
+    profiles: ["api"]
+    build:
+      context: ./services
+      dockerfile: web-api/Dockerfile
+    environment: *api-env
+    ports:
+      - "8082:8082"
+    depends_on: *api-deps
+
+volumes:
+  db-data:

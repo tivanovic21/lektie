@@ -1,0 +1,9 @@
+# Each line: path, then the GitHub users who review it.
+# TODO: add your colleagues' GitHub usernames, then remove the "#" in front of their lines.
+
+*                       @tivanovic21
+/apps/mobile/           @tivanovic21
+# /apps/web/              @WEB_DEV
+# /services/              @BACKEND_1 @BACKEND_2
+# /db/                    @BACKEND_1 @BACKEND_2
+# /docs/api/              @tivanovic21 @WEB_DEV @BACKEND_1 @BACKEND_2
