@@ -1,4 +1,4 @@
--- Lektie data model. Rules referenced below are in CLAUDE.md ("Rules that shape the design").
+-- Lektie data model. Rules referenced below are in AGENTS.md.
 -- Fixed value lists use text + CHECK (not Postgres enums): easier to map in JPA and to extend.
 
 -- ── People ──────────────────────────────────────────────────────────────

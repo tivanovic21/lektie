@@ -6,4 +6,3 @@
 # /apps/web/              @WEB_DEV
 # /services/              @BACKEND_1 @BACKEND_2
 # /db/                    @BACKEND_1 @BACKEND_2
-# /docs/api/              @tivanovic21 @WEB_DEV @BACKEND_1 @BACKEND_2
