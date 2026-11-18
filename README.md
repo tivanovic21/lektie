@@ -59,6 +59,6 @@ cd services
 
 - `main` is protected. Work on a branch (`feature/<short-name>`, `fix/<short-name>`) and open a pull request.
 - One approval is needed. `CODEOWNERS` picks the reviewer.
-- CI runs only for the folders that changed.
+- There is no CI. Run the checks locally before you open a PR: `pnpm typecheck && pnpm lint && pnpm build:web` and `cd services && ./gradlew build`.
 - Never edit a migration that is on `main`. Add a new one.
 - Never commit `.env` or secrets.

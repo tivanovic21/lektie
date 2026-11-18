@@ -12,6 +12,6 @@
 
 ## Checklist
 
-- [ ] CI is green
+- [ ] Local checks pass (see "Ways of working" in the README)
 - [ ] No edit to a migration that is already on `main`
 - [ ] API contract in `docs/api/` updated (if the API changed)
