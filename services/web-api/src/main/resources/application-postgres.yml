@@ -1,0 +1,15 @@
+# PostgreSQL from docker-compose. Run "docker compose up -d" first, it also applies db/migrations.
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/lektie}
+    username: ${DB_USER:lektie}
+    password: ${DB_PASSWORD:lektie}
+  jpa:
+    hibernate:
+      # Schema is owned by db/migrations (Flyway). The API only checks it.
+      ddl-auto: validate
+
+lektie:
+  # Turn on to get the demo users in a fresh Postgres database. Keep false in production.
+  seed-demo-users: ${SEED_DEMO_USERS:false}
