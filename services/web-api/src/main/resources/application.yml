@@ -1,18 +1,42 @@
+# Shared settings. Database settings live in application-h2.yml and application-postgres.yml.
+# Pick one with WEB_API_PROFILE in .env or SPRING_PROFILES_ACTIVE (default: h2, in-memory database with demo users).
+
 server:
   port: ${PORT:8082}
 
 spring:
   application:
     name: web-api
-  datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/lektie}
-    username: ${DB_USER:lektie}
-    password: ${DB_PASSWORD:lektie}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:${WEB_API_PROFILE:h2}}
+  # Reads KEY=VALUE pairs from a .env file, whether the app starts in services/web-api (bootRun) or the repo root (IDE).
+  # Real environment variables win over the file.
+  config:
+    import:
+      - optional:file:.env[.properties]
+      - optional:file:../../.env[.properties]
   jpa:
     open-in-view: false
-    hibernate:
-      # Schema is owned by db/migrations (Flyway). The API only checks it.
-      ddl-auto: validate
+
+lektie:
+  jwt:
+    # RSA key pair (PKCS#8 private, X.509 public), base64 body on one line, BEGIN/END lines optional.
+    # Generate with the commands in .env.example.
+    private-key: ${JWT_PRIVATE_KEY:}
+    public-key: ${JWT_PUBLIC_KEY:}
+    issuer: ${JWT_ISSUER:lektie-web-api}
+    expiration: ${JWT_EXPIRATION:24h}
+    # true only in the h2 profile: without keys a throwaway pair is generated at startup.
+    generate-keys-if-missing: false
+  cookie:
+    name: token
+    # true in production (HTTPS only). SameSite=None requires secure=true.
+    secure: ${COOKIE_SECURE:false}
+    same-site: ${COOKIE_SAME_SITE:Lax}
+  # Comma separated origins of Lektie Studio.
+  cors-allowed-origins: ${FRONTEND:http://localhost:5173}
+  # Inserts Admin/Parent/Teacher/Student demo users if they do not exist yet.
+  seed-demo-users: false
 
 management:
   endpoints:

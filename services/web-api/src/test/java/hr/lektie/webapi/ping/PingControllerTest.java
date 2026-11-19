@@ -16,7 +16,8 @@ class PingControllerTest {
     void pingReturnsOk() throws Exception {
         mvc.perform(get("/api/ping"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.service").value("web-api"))
-                .andExpect(jsonPath("$.status").value("ok"));
+                .andExpect(jsonPath("$.message").value("OK"))
+                .andExpect(jsonPath("$.data.service").value("web-api"))
+                .andExpect(jsonPath("$.data.status").value("ok"));
     }
 }
